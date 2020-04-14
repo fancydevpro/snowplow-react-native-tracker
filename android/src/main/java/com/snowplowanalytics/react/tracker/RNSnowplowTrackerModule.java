@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.snowplowanalytics.react.util.EventUtil;
 import com.snowplowanalytics.snowplow.tracker.Emitter;
+import com.snowplowanalytics.snowplow.tracker.Subject;
 import com.snowplowanalytics.snowplow.tracker.Tracker;
 import com.snowplowanalytics.snowplow.tracker.emitter.HttpMethod;
 import com.snowplowanalytics.snowplow.tracker.emitter.RequestSecurity;
@@ -48,6 +49,19 @@ public class RNSnowplowTrackerModule extends ReactContextBaseJavaModule {
                 .screenviewEvents(options.hasKey("autoScreenView") ? options.getBoolean("autoScreenView") : false)
                 .build()
         );
+    }
+
+    @ReactMethod
+    public void identify(String userId) {
+        if (this.tracker != null && userId != null) {
+            if (this.tracker.getSubject() != null) {
+                this.tracker.getSubject().setUserId(userId);
+            } else {
+                Subject subject = new Subject.SubjectBuilder().build();
+                subject.setUserId(userId);
+                this.tracker.setSubject(subject);
+            }
+        }
     }
 
     @ReactMethod

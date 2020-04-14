@@ -39,6 +39,14 @@ RCT_EXPORT_METHOD(initialize
     }];
 }
 
+RCT_EXPORT_METHOD(identify:(NSString *)userId) {
+    if (userId != nil) {
+        SPSubject *subject = [[SPSubject alloc] initWithPlatformContext:YES andGeoContext:NO];
+        [subject setUserId:userId];
+        [self.tracker setSubject:subject];
+    }
+}
+
 RCT_EXPORT_METHOD(trackSelfDescribingEvent
                   :(nonnull SPSelfDescribingJson *)event
                   :(NSArray<SPSelfDescribingJson *> *)contexts) {
